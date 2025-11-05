@@ -11,7 +11,6 @@ public class Auditorium {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     private String name;
     private int rows;
     private int seatsPerRow;
