@@ -81,6 +81,6 @@ public class ShowtimeService {
 
     @Transactional(readOnly = true)
     public List<Showtime> getShowtimesOrderedByReleaseDate() {
-        return showtimeRepo.findAll(Sort.by(Sort.Direction.DESC, "releaseDate"));
+        return showtimeRepo.findAllByOrderByReleaseDateDesc();
     }
 }
