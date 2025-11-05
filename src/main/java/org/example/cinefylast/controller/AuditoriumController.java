@@ -16,6 +16,7 @@ public class AuditoriumController {
 
     @GetMapping
     public List<Auditorium> getAll() {
+        System.out.println("Getting all auditoriums");
         return repo.findAll();
     }
 }
