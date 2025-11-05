@@ -1,4 +1,5 @@
 package org.example.cinefylast.repo;
 
-public class SeatRepo {
-}
+import org.example.cinefylast.model.Seat;
+import org.springframework.data.jpa.repository.JpaRepository;
+public interface SeatRepo extends JpaRepository<Seat, Long> {}
