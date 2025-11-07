@@ -17,6 +17,7 @@ public record ShowtimeDto(
         String backdropUrl
 ) {
     public static ShowtimeDto fromEntity(Showtime showtime) {
+
         return new ShowtimeDto(
                 showtime.getId(),
                 showtime.getTmdbId(),

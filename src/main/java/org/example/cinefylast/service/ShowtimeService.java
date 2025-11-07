@@ -32,6 +32,7 @@ public class ShowtimeService {
 
     @Transactional
     public List<Showtime> syncLatestShowtimes() {
+
         List<TmdbMovie> movies = tmdbClient.fetchLatestMovies(LATEST_MOVIE_LIMIT);
         if (CollectionUtils.isEmpty(movies)) {
             log.info("No TMDB movies retrieved for synchronisation.");
@@ -54,11 +55,11 @@ public class ShowtimeService {
 
             LocalDateTime startsAt = releaseDate.atTime(LocalTime.of(DEFAULT_SHOWTIME_HOUR, 0));
 
-            Showtime showtime = showtimeRepo.findByTmdbId(movie.id())
+            Showtime showtime = showtimeRepo.findByTmdbId(Long.valueOf(movie.id()))
                     .orElseGet(Showtime::new);
 
             showtime.setAuditoriumId(auditorium.getId());
-            showtime.setTmdbId(movie.id());
+            showtime.setTmdbId(Long.valueOf(movie.id()));
             showtime.setTitle(movie.title());
             showtime.setOverview(movie.overview());
             showtime.setPosterUrl(movie.posterUrl());

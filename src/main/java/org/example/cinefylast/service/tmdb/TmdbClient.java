@@ -91,13 +91,14 @@ public class TmdbClient {
         String backdropUrl = buildImageUrl(result.backdropPath(), properties.getBackdropSize());
 
         return new TmdbMovie(
-                result.id(),
+                result.id(),              // kein (int) Cast mehr
                 result.title(),
                 result.overview(),
                 releaseDate,
                 posterUrl,
                 backdropUrl
         );
+
     }
 
     private LocalDate parseReleaseDate(String value) {

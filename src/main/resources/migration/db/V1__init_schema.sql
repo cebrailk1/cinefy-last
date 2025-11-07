@@ -21,6 +21,7 @@ CREATE TABLE showtime (
                           id              SERIAL PRIMARY KEY,
                           auditorium_id   INT         NOT NULL REFERENCES auditorium(id) ON DELETE CASCADE,
                           starts_at       TIMESTAMP   NOT NULL,
+
                           CONSTRAINT uq_showtime UNIQUE (auditorium_id, starts_at)
 );
 

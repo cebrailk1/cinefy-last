@@ -2,7 +2,6 @@ plugins {
     id("org.springframework.boot") version "3.3.5"
     id("io.spring.dependency-management") version "1.1.6"
     id("java")
-    id("io.freefair.lombok") version "8.10"   // richtet Lombok + AP ein
 }
 
 group = "org.example"
@@ -18,11 +17,19 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+    implementation("org.postgresql:postgresql:42.7.4")
 
     // DB-Treiber (tausche falls nötig)
-    runtimeOnly("org.postgresql:postgresql:42.7.4")
+
+    compileOnly("org.projectlombok:lombok:1.18.34")
+    annotationProcessor("org.projectlombok:lombok:1.18.34")
+    testCompileOnly("org.projectlombok:lombok:1.18.34")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.34")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
+tasks.test { useJUnit() }
 }
 
-// Nutze Standardstruktur: src/main/java, src/test/java

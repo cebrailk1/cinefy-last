@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Setter
 @ConfigurationProperties(prefix = "tmdb")
 public class TmdbProperties {
+
     private String apiKey;
     private String baseUrl = "https://api.themoviedb.org/3";
     private String imageBaseUrl = "https://image.tmdb.org/t/p";
