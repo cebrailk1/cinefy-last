@@ -1,9 +1,0 @@
-ALTER TABLE showtime
-    ADD COLUMN IF NOT EXISTS tmdb_id BIGINT,
-    ADD COLUMN IF NOT EXISTS title TEXT,
-    ADD COLUMN IF NOT EXISTS overview TEXT,
-    ADD COLUMN IF NOT EXISTS poster_url TEXT,
-    ADD COLUMN IF NOT EXISTS backdrop_url TEXT,
-    ADD COLUMN IF NOT EXISTS release_date DATE;
-
-CREATE UNIQUE INDEX IF NOT EXISTS uq_showtime_tmdb_id ON showtime (tmdb_id);
