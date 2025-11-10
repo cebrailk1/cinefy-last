@@ -4,40 +4,24 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 @Entity
 @Table(name = "showtime")
-@Getter
-@Setter
 public class Showtime {
 
+    // Getter & Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "auditorium_id")
-    private Integer auditoriumId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "auditorium_id", nullable = false)
+    private Auditorium auditorium; // falls du die Klasse hast
 
-    @Column(name = "starts_at")
+    @Column(name = "starts_at", nullable = false)
     private LocalDateTime startsAt;
 
-    @Column(name = "tmdb_id", unique = true)
-    private Long tmdbId;
-
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "overview", columnDefinition = "TEXT")
-    private String overview;
-
-    @Column(name = "poster_url")
-    private String posterUrl;
-
-    @Column(name = "backdrop_url")
-    private String backdropUrl;
-
-    @Column(name = "release_date")
-    private LocalDate releaseDate;
 }

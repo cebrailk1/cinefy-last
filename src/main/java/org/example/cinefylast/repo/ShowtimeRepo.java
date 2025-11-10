@@ -1,13 +1,7 @@
 package org.example.cinefylast.repo;
 
-import org.example.cinefylast.model.Showtime;
+import org.example.cinefylast.model.Showtime;   // <-- WICHTIG: Showtime (nicht Auditorium!)
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
-
-public interface ShowtimeRepo extends JpaRepository<Showtime, Integer> {
-    Optional<Showtime> findByTmdbId(Long tmdbId);
-
-    List<Showtime> findAllByOrderByReleaseDateDesc();
+public interface ShowtimeRepo extends JpaRepository<Showtime, Long> {
 }

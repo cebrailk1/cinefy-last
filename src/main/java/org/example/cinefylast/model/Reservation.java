@@ -1,31 +1,30 @@
 package org.example.cinefylast.model;
-import jakarta.persistence.*;
-import lombok.Data;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Setter
+@Getter
 @Entity
-@Data
+@Table(name = "reservation")
 public class Reservation {
+
+    // Getter & Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false, updatable = false, length = 8)
+
+    @Column(name = "reservation_code", nullable = false)
     private String reservationCode;
 
-    private int showtimeId;
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    public Reservation(int i) {
-    }
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "showtime_id", nullable = false)
+    private Showtime showtime;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        if (this.reservationCode == null || this.reservationCode.isBlank()) {
-            // einfacher Code-Generator
-            this.reservationCode = UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();
-        }
-    }
 }
