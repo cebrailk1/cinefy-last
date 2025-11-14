@@ -21,7 +21,7 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql:11.14.1")
     testImplementation 'org.testcontainers:postgresql'
     implementation("org.postgresql:postgresql:42.7.8")
-
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     // DB-Treiber (tausche falls nötig)
 
     compileOnly("org.projectlombok:lombok:1.18.34")
@@ -35,5 +35,5 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
 }
-tasks.test { useJUnit() }
+tasks.test { useJUnitPlatform() }
 

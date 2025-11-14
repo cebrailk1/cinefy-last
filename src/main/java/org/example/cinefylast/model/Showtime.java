@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Table(name = "showtime")
 public class Showtime {
 
-    // Getter & Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

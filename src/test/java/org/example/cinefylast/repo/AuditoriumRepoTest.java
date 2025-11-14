@@ -1,5 +1,6 @@
 package org.example.cinefylast.repo;
 
+import org.example.cinefylast.annotations.Testing;
 import org.example.cinefylast.model.Auditorium;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@Testing
 class AuditoriumRepoTest {
     @Autowired
     private AuditoriumRepo auditoriumRepo;
@@ -41,7 +41,7 @@ class AuditoriumRepoTest {
         Auditorium auditoriums = auditoriumRepo.findByName("Saal 3");
         assertThat(auditoriums).isNotNull();
         assertThat(auditoriums.getRows()).isEqualTo(10);
-        assertThat(auditoriums.getSeatsPerRow()).as("Seats per row").isEqualTo(12);
+        assertThat(auditoriums.getSeatsPerRow()).as("Seats per row").isEqualTo(15);
     }
 
 }

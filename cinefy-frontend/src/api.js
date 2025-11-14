@@ -1,29 +1,62 @@
-const BASE = "http://localhost:8080/api";
+// src/api.js
+const API_URL = "http://localhost:8080/api"; // Backend-URL
 
-async function http(method, path, data, params) {
-    const url = new URL(BASE + path);
-    if (params) Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-
-    const res = await fetch(url.toString(), {
-        method,
-        headers: data ? { "Content-Type": "application/json" } : {},
-        body: data ? JSON.stringify(data) : undefined,
-    });
-
-    if (!res.ok) {
-        const text = await res.text().catch(() => "");
-        throw new Error(`HTTP ${res.status}: ${text || res.statusText}`);
+async function handleResponse(response) {
+    if (!response.ok) {
+        let message = `API-Fehler: ${response.status} ${response.statusText}`;
+        try {
+            const errorData = await response.json();
+            if (errorData && errorData.message) {
+                message = errorData.message;
+            }
+        } catch {
+            // ignorieren – fallback auf message
+        }
+        throw new Error(message);
     }
-    // 204 No Content abfangen
-    if (res.status === 204) return null;
-    return res.json();
+
+    try {
+        return await response.json();
+    } catch {
+        return null; // falls der Body leer ist
+    }
 }
 
-export const fetchShowtimes = (auditoriumId, date) =>
-    http("GET", `/showtime`, null, { date });
+// Beispiel: falls du später mal brauchst
+export async function fetchAuditoriums() {
+    const response = await fetch(`${API_URL}/auditoriums`);
+    return handleResponse(response);
+}
 
-export const fetchSeatMap = () =>
-    http("GET", `/seats`);
+// Beispiel: Filme/Liste von Showtimes, wenn du willst
+export async function fetchMovies() {
+    const response = await fetch(`${API_URL}/showtime`);
+    return handleResponse(response);
+}
 
-export const createReservation = (showtimeId, seatIds) =>
-    http("POST", `/reservations`, { showtimeId, seatIds });
+// WICHTIG: Showtimes mit Parametern (auditoriumId, date)
+export async function fetchShowtimes(auditoriumId, date) {
+    const params = new URLSearchParams();
+    if (auditoriumId != null) params.append("auditoriumId", auditoriumId);
+    if (date) params.append("date", date);
+
+    const response = await fetch(`${API_URL}/showtime?${params.toString()}`);
+    return handleResponse(response);
+}
+
+// Sitzplan für eine konkrete Showtime
+export async function fetchSeatMap(showtimeId) {
+    const params = new URLSearchParams({ showtimeId });
+    const response = await fetch(`${API_URL}/seats?${params.toString()}`);
+    return handleResponse(response);
+}
+
+// Reservation erstellen
+export async function createReservation(showtimeId, seatIds) {
+    const response = await fetch(`${API_URL}/reservations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ showtimeId, seatIds }),
+    });
+    return handleResponse(response);
+}

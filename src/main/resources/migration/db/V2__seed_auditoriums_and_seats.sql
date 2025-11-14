@@ -1,6 +1,6 @@
 
 -- --- Säle anlegen
-INSERT INTO auditorium (name, rows, seats_per_row) VALUES
+INSERT INTO auditorium (name, row_count, seats_per_row) VALUES
                                                        ('Saal 1', 15, 25),
                                                        ('Saal 2', 20, 25),
                                                        ('Saal 3', 10, 15);
