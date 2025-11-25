@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
+
     private final ReservationRepo reservationRepo;
     private final ShowtimeRepo showtimeRepo;
     private final ReservationSeatRepo reservationSeatRepo;
@@ -24,44 +25,50 @@ public class ReservationService {
         return java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-
     @Transactional
     public Reservation createReservation(CreateReservationRequest.CreateRequest req) {
+
         if (req.showtimeId() == null)
             throw new IllegalArgumentException("showtimeId darf nicht null sein");
+
         if (req.seatIds() == null || req.seatIds().isEmpty())
             throw new IllegalArgumentException("Es muss mindestens ein Sitz ausgewählt werden.");
 
         Showtime showtime = showtimeRepo.findById(req.showtimeId())
-                .orElseThrow(() -> new IllegalArgumentException("Showtime mit ID " + req.showtimeId() + " wurde nicht gefunden."));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Showtime mit ID " + req.showtimeId() + " wurde nicht gefunden.")
+                );
 
         LocalDateTime now = LocalDateTime.now();
-        if (showtime.getStartsAt().isBefore(now.plusHours(1))) {
+
+        if (showtime.getStartsAt().isBefore(now.plusHours(1)))
             throw new IllegalArgumentException("Reservierungen sind nur bis 1 Stunde vor Vorführungsbeginn möglich.");
-        }
-        if (showtime.getStartsAt().isAfter(now.plusDays(7))) {
+
+        if (showtime.getStartsAt().isAfter(now.plusDays(7)))
             throw new IllegalArgumentException("Reservierungen sind nur bis 7 Tage im Voraus erlaubt.");
-        }
+
+        // Prüfe alle Sitzplätze
         for (Long seatId : req.seatIds()) {
-            if (reservationSeatRepo.existsByShowIdAndSeatId(showtime.getId(), seatId)) {
+            if (reservationSeatRepo.existsByShowtimeIdAndSeatId(showtime.getId(), seatId)) {
                 throw new IllegalStateException("Sitz " + seatId + " ist bereits reserviert.");
             }
         }
 
+        // Reservierung speichern
         Reservation reservation = new Reservation();
         reservation.setShowtime(showtime);
         reservation.setReservationCode(generateCode());
         reservation = reservationRepo.save(reservation);
 
+        // Sitzzuordnungen speichern
         for (Long seatId : req.seatIds()) {
             ReservationSeat rs = new ReservationSeat();
             rs.setReservationId(reservation.getId());
-            rs.setShowId(showtime.getId());
+            rs.setShowtimeId(showtime.getId());
             rs.setSeatId(seatId);
             reservationSeatRepo.save(rs);
         }
 
         return reservation;
     }
-
 }

@@ -21,7 +21,7 @@ public class ReservationSeat {
     private Long reservationId;
 
     @Column(name = "showtime_id", nullable = false)
-    private Long showId;
+    private Long showtimeId;
 
     @Column(name = "seat_id", nullable = false)
     private Long seatId;

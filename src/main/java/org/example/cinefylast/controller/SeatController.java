@@ -2,13 +2,9 @@ package org.example.cinefylast.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.cinefylast.api.dto.SeatDto;
-import org.example.cinefylast.model.Showtime;
 import org.example.cinefylast.repo.SeatRepo;
-import org.example.cinefylast.repo.ShowtimeRepo;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,25 +13,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SeatController {
 
-    private final ShowtimeRepo showtimeRepo;
     private final SeatRepo seatRepo;
 
     @GetMapping("/seats")
+    @Transactional(readOnly = true)
     public List<SeatDto> getSeats(@RequestParam Long showtimeId) {
-
-        Showtime st = showtimeRepo.findById(showtimeId)
-                .orElseThrow(() -> new IllegalArgumentException("Showtime nicht gefunden"));
-
-        int auditoriumId = st.getAuditorium().getId();
-
-        return seatRepo.findByAuditoriumId(auditoriumId)
-                .stream()
-                .map(s -> new SeatDto(
-                        s.getId(),
-                        s.getRowNumber(),
-                        s.getSeatNumber(),
-                        "available"
-                ))
+        var rows = seatRepo.findSeatMap(showtimeId);
+        return rows.stream()
+                .map(r -> new SeatDto(r.getId(), r.getRowNumber(), r.getSeatNumber(), r.getStatus()))
                 .toList();
     }
 }
