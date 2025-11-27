@@ -5,6 +5,7 @@ import org.example.cinefylast.api.dto.CreateReservationRequest;
 import org.example.cinefylast.model.Reservation;
 import org.example.cinefylast.service.ReservationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,6 +20,7 @@ public class ReservationController {
             @RequestBody CreateReservationRequest.CreateRequest req) {
 
         Reservation saved = reservationService.createReservation(req);
+        SimpleMailMessage message = new SimpleMailMessage();
 
         return ResponseEntity.ok(new CreateReservationRequest.Response(
                 saved.getId(),
@@ -26,5 +28,6 @@ public class ReservationController {
                 saved.getShowtime().getId(),
                 saved.getCreatedAt()
         ));
+
     }
 }

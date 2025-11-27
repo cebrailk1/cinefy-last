@@ -1,8 +1,8 @@
 package org.example.cinefylast.api.dto;
 
 public record SeatDto(
-        Long id,          // vorher Integer
-        Integer row,
-        Integer number,
+        Long id,
+        Integer rowNumber,
+        Integer seatNumber,
         String status
 ) {}

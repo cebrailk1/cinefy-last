@@ -19,8 +19,10 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
     implementation("org.flywaydb:flyway-core:11.14.1")
     implementation("org.flywaydb:flyway-database-postgresql:11.14.1")
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
     testImplementation 'org.testcontainers:postgresql'
     implementation("org.postgresql:postgresql:42.7.8")
+    implementation 'me.paulschwarz:spring-dotenv:4.0.0'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     // DB-Treiber (tausche falls nötig)
 
